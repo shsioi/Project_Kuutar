@@ -533,13 +533,13 @@ int main(){
                     if (temp1 == 0){
                     
                     m = Mons1.attack(hero1,targetpart);
-                    cout << "target :"<<name;
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target : "<<name<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     }
 
                     if (temp1 == 1){
-                    cout << "target :"<<"Kuutar";
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target :"<<"Kuutar"<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     m = Mons1.attack(hero2,targetpart);
                 }
                 cout <<m ;
@@ -572,13 +572,13 @@ int main(){
                     if (temp1 == 0){
                     
                     m = Mons2.attack(hero1,targetpart);
-                    cout << "target :"<<name;
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target : "<<name<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     }
 
                     if (temp1 == 1){
-                    cout << "target :"<<"Kuutar";
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target :"<<"Kuutar"<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     m = Mons2.attack(hero2,targetpart);
                 }
                 cout <<m ;
@@ -601,21 +601,21 @@ int main(){
                 if(tempp == 1) {Mons3.dodge();
                 cout <<"dodge";}
                 if(tempp == 2) { 
-                    if (temp2==0) targetpart ="H";
-                    if (temp2==1) targetpart ="RH";
-                    if (temp2==2) targetpart ="LH";
-                    if (temp2==3) targetpart ="RL";
-                    if (temp2==4) targetpart ="LL";
+                    if (temp2==0) targetpart ="H ";
+                    if (temp2==1) targetpart ="RH ";
+                    if (temp2==2) targetpart ="LH ";
+                    if (temp2==3) targetpart ="RL ";
+                    if (temp2==4) targetpart ="LL ";
                     if (temp1 == 0){
                     
                     m = Mons3.attack(hero1,targetpart);
-                    cout << "target :"<<name;
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target : "<<name<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     }
 
                     if (temp1 == 1){
-                    cout << "target :"<<"Kuutar";
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target :"<<"Kuutar"<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     m = Mons3.attack(hero2,targetpart);
                 }
                 cout <<m ;
@@ -647,13 +647,13 @@ int main(){
                     if (temp1 == 0){
                     
                     m = Mons4.attack(hero1,targetpart);
-                    cout << "target :"<<name;
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target : "<<name<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     }
 
                     if (temp1 == 1){
-                    cout << "target :"<<"Kuutar";
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target :"<<"Kuutar"<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     m = Mons4.attack(hero2,targetpart);
                     }
                     cout <<m ;
@@ -685,13 +685,13 @@ int main(){
                     if (temp1 == 0){
                     
                     m = Mons5.attack(hero1,targetpart);
-                    cout << "target :"<<name;
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target : "<<name<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     }
 
                     if (temp1 == 1){
-                    cout << "target :"<<"Kuutar";
-                    cout <<"whichpart :"<<targetpart;
+                    cout << "target :"<<"Kuutar"<<" ";
+                    cout <<"whichpart : "<<targetpart<<" ";
                     m = Mons5.attack(hero2,targetpart);
                 }
                 cout <<m ;
