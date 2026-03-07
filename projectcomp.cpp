@@ -13,15 +13,17 @@ class Equipment{
     int hpmax;
     int atk;
     int def;
+    int spd;
     public:
-        Equipment(int,int,int);
+        Equipment(int,int,int,int);
         vector<int> getStat();            
 };
 
-Equipment::Equipment(int h, int a, int d){
+Equipment::Equipment(int h, int a, int d,int s){
     hpmax = h;
     atk = a;
     def = d;
+    spd = s;
 }
 
 vector<int> Equipment::getStat(){
@@ -29,6 +31,7 @@ vector<int> Equipment::getStat(){
     stat.push_back(hpmax);
     stat.push_back(atk);
     stat.push_back(def);
+    stat.push_back(spd);
     return stat;
 }
 
@@ -40,6 +43,7 @@ class Unit{
 		int atk;
 	    int def;
         int hppart_head;
+
         int hppart_left_hand;
         int hppart_right_hand;
         int hppart_left_leg;
@@ -236,43 +240,43 @@ int Unit::attack(Unit &opp,string targetpart){
 
 void Unit::showStatus(){
     if(type == "Maincha1"){
-        cout << "\n---------------------------------------\n"; 
+        cout << "\n--------------------------------------------------------\n"; 
         cout << name << "\n"; 
         cout << "HP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;        
-        cout << "\n---------------------------------------\n";
+        cout << "\n--------------------------------------------------------\n";
     }    
     else if(type == "Maincha2"){
-        cout << "\n---------------------------------------\n"; 
+        cout << "\n--------------------------------------------------------\n"; 
         cout << name << "\n"; 
         cout << "HP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;        
-        cout << "\n---------------------------------------\n";
+        cout << "\n--------------------------------------------------------\n";
     }    
     else if(type == "Mons1"){
-        cout << "\t\t\t\t---------------------------------------\n"; 
+        cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\t\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
-        cout << "\n\t\t\t\t---------------------------------------\n";
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
+        cout << "\n\t\t\t\t--------------------------------------------------------\n";
     }
     else if(type == "Mons2"){
-        cout << "\t\t\t\t---------------------------------------\n"; 
+        cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\t\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
-        cout << "\n\t\t\t\t---------------------------------------\n";
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
+        cout << "\n\t\t\t\t--------------------------------------------------------\n";
     }else if(type == "Mons3"){
-        cout << "\t\t\t\t---------------------------------------\n"; 
+        cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\t\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
-        cout << "\n\t\t\t\t---------------------------------------\n";
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
+        cout << "\n\t\t\t\t--------------------------------------------------------\n";
     }else if(type == "Mons4"){
-        cout << "\t\t\t\t---------------------------------------\n"; 
+        cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\t\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
-        cout << "\n\t\t\t\t---------------------------------------\n";
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
+        cout << "\n\t\t\t\t--------------------------------------------------------\n";
     }else if(type == "Mons5"){
-        cout << "\t\t\t\t---------------------------------------\n"; 
+        cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\t\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
-        cout << "\n\t\t\t\t---------------------------------------\n";
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
+        cout << "\n\t\t\t\t--------------------------------------------------------\n";
     }
 }
 
@@ -304,6 +308,7 @@ void Unit::equip(Equipment *newEquip){
         hpmax -= oldStat[0];
         atk -= oldStat[1];
         def -= oldStat[2];
+        spd -= oldStat[3];
     }
     
 
@@ -312,10 +317,14 @@ void Unit::equip(Equipment *newEquip){
     hpmax += newStat[0];
     atk += newStat[1];
     def += newStat[2];
+    spd += newStat[3];
 
 
     if(hp > hpmax){
         hp = hpmax;
+    }
+    if(spd_t > spd){
+        spd_t = spd;
     }
 }
 void Unit::set_death(){
@@ -343,13 +352,17 @@ int main(){
 	getline(cin,name);	
 	Unit hero1("Maincha1",name);
 	Unit hero2("Maincha2","Kuutar");
-    Unit Mons1("Mons1","1");
-    Unit Mons2("Mons2","2");
-    Unit Mons3("Mons3","3");
-    Unit Mons4("Mons4","4");
-    Unit Mons5("Mons5","5");
+    Unit Mons1("Mons1","slime");
+    Unit Mons2("Mons2","pic");
+    Unit Mons3("Mons3","pork");
+    Unit Mons4("Mons4","Doctor");
+    Unit Mons5("Mons5","cabbage");
 
-         
+    Equipment sword(0,8,4,0);
+	Equipment axes(0, 16, 0,0);
+    Equipment shield(0, 0, 8,0);
+    Equipment armor(25, 0, 4,0);
+    Equipment boots(0,0,3,9);      
     
 
     
@@ -396,6 +409,25 @@ int main(){
         hero1.setloom();
         hero2.setloom();
 
+        char eq;	
+	cout << " [1] Sword \n [2] Axes \n [3] Shield \n [4] Armor \n [5] boots \n";
+	cout << "Please selet your equipment for "<<name<<": ";
+	cin >> eq;
+    cin.ignore(1000, '\n');
+	if(eq == '1') hero1.equip(&sword);
+    else if(eq == '2') hero1.equip(&axes);
+    else if(eq == '3') hero1.equip(&shield);
+    else if(eq == '4') hero1.equip(&armor);
+    else if(eq == '5') hero1.equip(&boots);
+    cout << " [1] Sword \n [2] Axes \n [3] Shield \n [4] Armor \n [5] boots \n";
+	cout << "Please selet your equipment for Kuutar: ";
+	cin >> eq;
+	if(eq == '1') hero2.equip(&sword);
+    else if(eq == '2') hero2.equip(&axes);
+    else if(eq == '3') hero2.equip(&shield);
+    else if(eq == '4') hero2.equip(&armor);
+    else if(eq == '5') hero2.equip(&boots);
+
         char player_action = '\0',player_target ='\0';
         string targetpart="";
         char monster1_action = '\0',monster2_action = '\0',monster3_action = '\0';
@@ -430,7 +462,7 @@ int main(){
                 }
 
                 if(player_action == 'A') {
-                    cout << "target :";
+                    cout << "target : ";
                     if(!Mons1.isDead())cout <<"[1]";
                     if(!Mons2.isDead())cout <<"[2]"; 
                     if(!Mons3.isDead())cout <<"[3]";
