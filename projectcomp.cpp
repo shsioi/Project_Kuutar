@@ -42,8 +42,9 @@ class Unit{
 		int hpmax;
 		int atk;
 	    int def;
+        int mana;
+        int manamax ;
         int hppart_head;
-
         int hppart_left_hand;
         int hppart_right_hand;
         int hppart_left_leg;
@@ -53,7 +54,7 @@ class Unit{
         bool dodge_on;	
         int exp;
         int lvl;
-        Equipment *equipment;	
+        Equipment *equipment1 ,*equipment2;	
         bool part2atk;	
         int hbb;
         int Hbb;	
@@ -65,6 +66,7 @@ class Unit{
 		void personTurn();
         int spd_t;
 		int attack(Unit &,string);
+        int skill1(Unit &,string);
 		int beAttacked(int,string);
 		int heal(Unit &);
         int beheal(int);
@@ -76,7 +78,7 @@ class Unit{
 		void guard();
         void dodge();
 		bool isDead();	
-        void equip(Equipment *);
+        void equip(Equipment *,Equipment *);
         void set_death();
         void spawn();
         void setlvl(int);
@@ -99,6 +101,7 @@ Unit::Unit(string t,string n){
         exp=0;
         hbb=0;
         Hbb=0;
+        manamax=50;
     }else if(type == "Maincha2"){
         lvl =1;
         hpmax = 60;
@@ -108,6 +111,7 @@ Unit::Unit(string t,string n){
         exp=0;
         hbb=0;
         Hbb=0;
+        manamax=50;
     }else if(t == "Mons1"){
         lvl =1;
         exp = 0;
@@ -158,7 +162,9 @@ Unit::Unit(string t,string n){
     spd_t = spd;
     guard_on = false;
     dodge_on = false;
-    equipment = NULL;
+    equipment1 = NULL;
+    equipment2 = NULL;
+    mana = manamax;
 }
 
 int Unit::lvlup(){
@@ -210,6 +216,9 @@ void Unit::Hbk(){
 void Unit::hbk(){
     atk -=5;
 }
+string difRooM[6]={"first","second","third","fourth","last"};
+string Room[6]={"1","2","3","4","5"};
+
 int Unit::beAttacked(int oppatk, string targetpart){
 	int dmg =0;
 	if(oppatk > def){
@@ -237,7 +246,10 @@ int Unit::attack(Unit &opp,string targetpart){
     
 	return opp.beAttacked(atk,targetpart);
 }
-
+int Unit::skill1(Unit &opp,string targetpart){
+    mana -10.;
+	return opp.beAttacked((atk+(atk/2)),targetpart);
+}
 void Unit::showStatus(){
     if(type == "Maincha1"){
         cout << "\n--------------------------------------------------------\n"; 
@@ -254,28 +266,28 @@ void Unit::showStatus(){
     else if(type == "Mons1"){
         cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\tSPD: "<< spd_t;
         cout << "\n\t\t\t\t--------------------------------------------------------\n";
     }
     else if(type == "Mons2"){
         cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
-        cout << "\n\t\t\t\t--------------------------------------------------------\n";
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\tSPD: "<< spd_t;
+        cout << "\n--------------------------------------------------------\n";
     }else if(type == "Mons3"){
         cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
-        cout << "\n\t\t\t\t--------------------------------------------------------\n";
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\tSPD: "<< spd_t<<"\n";
+        cout << "\t\t\t\t--------------------------------------------------------\n";
     }else if(type == "Mons4"){
         cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\tSPD: "<< spd_t;
         cout << "\n\t\t\t\t--------------------------------------------------------\n";
     }else if(type == "Mons5"){
         cout << "\t\t\t\t--------------------------------------------------------\n"; 
         cout << "\t\t\t\t" << name << "\n"; 
-        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\t\tSPD: "<< spd_t;
+        cout << "\t\t\t\tHP: " << hp<<"/"<<hpmax << "\tATK: "<< atk << "\t\tDEF: "<< def<< "\tSPD: "<< spd_t;
         cout << "\n\t\t\t\t--------------------------------------------------------\n";
     }
 }
@@ -301,23 +313,38 @@ bool Unit::isDead(){
 	else return false;
 }
 
-void Unit::equip(Equipment *newEquip){
+void Unit::equip(Equipment *newEquip1,Equipment*newEquip2){
 
-    if(equipment != NULL){
-        vector<int> oldStat = equipment->getStat();
-        hpmax -= oldStat[0];
-        atk -= oldStat[1];
-        def -= oldStat[2];
-        spd -= oldStat[3];
+    if(equipment1 != NULL){
+        vector<int> oldStat1 = equipment1->getStat();
+        hpmax -= oldStat1[0];
+        atk -= oldStat1[1];
+        def -= oldStat1[2];
+        spd -= oldStat1[3];
     }
-    
+    if(equipment2 != NULL){
+        vector<int> oldStat2 = equipment2->getStat();
+        hpmax -= oldStat2[0];
+        atk -= oldStat2[1];
+        def -= oldStat2[2];
+        spd -= oldStat2[3];
+    }
 
-    equipment = newEquip;
-    vector<int> newStat = equipment->getStat();
-    hpmax += newStat[0];
-    atk += newStat[1];
-    def += newStat[2];
-    spd += newStat[3];
+    equipment1 = newEquip1;
+      if(equipment1 != NULL) {
+    vector<int> newStat1 = equipment1->getStat();
+    hpmax += newStat1[0];
+    atk += newStat1[1];
+    def += newStat1[2];
+    spd += newStat1[3];}
+
+    equipment2 = newEquip2;
+      if(equipment2 != NULL) {
+    vector<int> newStat2 = equipment2->getStat();
+    hpmax += newStat2[0];
+    atk += newStat2[1];
+    def += newStat2[2];
+    spd += newStat2[3];}
 
 
     if(hp > hpmax){
@@ -330,8 +357,6 @@ void Unit::equip(Equipment *newEquip){
 void Unit::set_death(){
     hp = 0;
 }
-string difRooM[6]={"first","second","third","fourth","last"};
-string Room[6]={"1","2","3","4","5"};
 
 void Unit::setloom(){
     hp=hpmax;
@@ -365,8 +390,6 @@ int main(){
     Equipment boots(0,0,3,9);      
     
 
-    
-
     while (true){
         char PlorNt;
         int diffroom = 0;
@@ -374,8 +397,8 @@ int main(){
         cout << "Choose[C] or Exit[E] : ";
         cin >>PlorNt;
         if(PlorNt == 'E') break;
-        else if (PlorNt == 'C') cout << "Please input difficulty first=1 second =2 third=3 fourth=4 last=5 :";
-        else cout <<"you must play\n"<< "Please input difficulty first=1 second =2 third=3 fourth=4 last=5 :";
+        else if (PlorNt == 'C') cout << "Please input difficulty first=1 second =2 third=3 fourth=4 last=5 : ";
+        else cout <<"you must play\n"<< "Please input difficulty first=1 second =2 third=3 fourth=4 last=5 : ";
         
         cin >> diffroom;
        if (diffroom==1){
@@ -409,25 +432,101 @@ int main(){
         hero1.setloom();
         hero2.setloom();
 
-        char eq;	
+        char eq;
+        char eq1;	
 	cout << " [1] Sword \n [2] Axes \n [3] Shield \n [4] Armor \n [5] boots \n";
-	cout << "Please selet your equipment for "<<name<<": ";
+	cout << "Please selet your equipment for "<<name<<" \n1: ";
 	cin >> eq;
     cin.ignore(1000, '\n');
-	if(eq == '1') hero1.equip(&sword);
-    else if(eq == '2') hero1.equip(&axes);
-    else if(eq == '3') hero1.equip(&shield);
-    else if(eq == '4') hero1.equip(&armor);
-    else if(eq == '5') hero1.equip(&boots);
+    cout <<"\n2: ";
+    cin >> eq1;
+    cout << "\n";
+	if(eq == '1') {
+        if(eq1=='0')hero1.equip(&sword,NULL);
+        if(eq1=='1')hero1.equip(&sword,&sword);
+        if(eq1=='2')hero1.equip(&sword,&axes);
+        if(eq1=='3')hero1.equip(&sword,&shield);
+        if(eq1=='4')hero1.equip(&sword,&armor);
+        if(eq1=='5')hero1.equip(&sword,&boots);
+    }
+    else if(eq == '2') {
+        if(eq1=='0')hero1.equip(&axes,NULL);
+        if(eq1=='1')hero1.equip(&axes,&sword);
+        if(eq1=='2')hero1.equip(&axes,&axes);
+        if(eq1=='3')hero1.equip(&axes,&shield);
+        if(eq1=='4')hero1.equip(&axes,&armor);
+        if(eq1=='5')hero1.equip(&axes,&boots);
+    }
+    else if(eq == '3') {
+        if(eq1=='0')hero1.equip(&shield,NULL);
+        if(eq1=='1')hero1.equip(&shield,&sword);
+        if(eq1=='2')hero1.equip(&shield,&axes);
+        if(eq1=='3')hero1.equip(&shield,&shield);
+        if(eq1=='4')hero1.equip(&shield,&armor);
+        if(eq1=='5')hero1.equip(&shield,&boots);
+    } 
+    else if(eq == '4') {
+        if(eq1=='0')hero1.equip(&armor,NULL);
+        if(eq1=='1')hero1.equip(&armor,&sword);
+        if(eq1=='2')hero1.equip(&armor,&axes);
+        if(eq1=='3')hero1.equip(&armor,&shield);
+        if(eq1=='4')hero1.equip(&armor,&armor);
+        if(eq1=='5')hero1.equip(&armor,&boots);
+    }
+    else if(eq == '5') {
+        if(eq1=='0')hero1.equip(&boots,NULL);
+        if(eq1=='1')hero1.equip(&boots,&sword);
+        if(eq1=='2')hero1.equip(&boots,&axes);
+        if(eq1=='3')hero1.equip(&boots,&shield);
+        if(eq1=='4')hero1.equip(&boots,&armor);
+        if(eq1=='5')hero1.equip(&boots,&boots);
+    }
     cout << " [1] Sword \n [2] Axes \n [3] Shield \n [4] Armor \n [5] boots \n";
-	cout << "Please selet your equipment for Kuutar: ";
+	cout << "Please selet your equipment for Kuutar \n1: ";
 	cin >> eq;
-	if(eq == '1') hero2.equip(&sword);
-    else if(eq == '2') hero2.equip(&axes);
-    else if(eq == '3') hero2.equip(&shield);
-    else if(eq == '4') hero2.equip(&armor);
-    else if(eq == '5') hero2.equip(&boots);
-
+    cin.ignore(1000, '\n');
+    cout <<"\n2: ";
+    cin >> eq1;
+    cout << "\n";
+	if(eq == '1') {
+        if(eq1=='0')hero2.equip(&sword,NULL);
+        if(eq1=='1')hero2.equip(&sword,&sword);
+        if(eq1=='2')hero2.equip(&sword,&axes);
+        if(eq1=='3')hero2.equip(&sword,&shield);
+        if(eq1=='4')hero2.equip(&sword,&armor);
+        if(eq1=='5')hero2.equip(&sword,&boots);
+    }
+    else if(eq == '2') {
+        if(eq1=='0')hero2.equip(&axes,NULL);
+        if(eq1=='1')hero2.equip(&axes,&sword);
+        if(eq1=='2')hero2.equip(&axes,&axes);
+        if(eq1=='3')hero2.equip(&axes,&shield);
+        if(eq1=='4')hero2.equip(&axes,&armor);
+        if(eq1=='5')hero2.equip(&axes,&boots);
+    }
+    else if(eq == '3') {
+        if(eq1=='0')hero2.equip(&shield,NULL);
+        if(eq1=='1')hero2.equip(&shield,&sword);
+        if(eq1=='2')hero2.equip(&shield,&axes);
+        if(eq1=='3')hero2.equip(&shield,&shield);
+        if(eq1=='4')hero2.equip(&shield,&armor);
+        if(eq1=='5')hero2.equip(&shield,&boots);
+    } 
+    else if(eq == '4') {
+        if(eq1=='0')hero2.equip(&armor,NULL);
+        if(eq1=='1')hero2.equip(&armor,&sword);
+        if(eq1=='2')hero2.equip(&armor,&axes);
+        if(eq1=='3')hero2.equip(&armor,&shield);
+        if(eq1=='4')hero2.equip(&armor,&armor);
+        if(eq1=='5')hero2.equip(&armor,&boots);
+    }
+    else if(eq == '5') {
+        if(eq1=='0')hero2.equip(&boots,NULL);
+        if(eq1=='1')hero2.equip(&boots,&sword);
+        if(eq1=='2')hero2.equip(&boots,&axes);
+        if(eq1=='3')hero2.equip(&boots,&shield);
+        if(eq1=='4')hero2.equip(&boots,&armor);
+        if(eq1=='5')hero2.equip(&boots,&boots);}
         char player_action = '\0',player_target ='\0';
         string targetpart="";
         char monster1_action = '\0',monster2_action = '\0',monster3_action = '\0';
@@ -450,6 +549,8 @@ int main(){
                 cin >>player_action;
                 if(player_action == 'G') hero1.guard();
                 if(player_action == 'D') hero1.dodge();
+
+                
 
                 if(player_action == 'H') {
                     cout << "target :self[S] friend[F]";
@@ -485,6 +586,27 @@ int main(){
                     p = hero1.attack(Mons4,targetpart);
                     if (player_target == '5')
                     p = hero1.attack(Mons5,targetpart);
+                }
+                if (player_action == 'S'){
+                    cout << "target : ";
+                    if(!Mons1.isDead())cout <<"[1]";
+                    if(!Mons2.isDead())cout <<"[2]"; 
+                    if(!Mons3.isDead())cout <<"[3]";
+                    if(!Mons4.isDead())cout <<"[4]";
+                    if(!Mons5.isDead())cout <<"[5]";
+                    cin>>player_target;
+                    cin.ignore(1000, '\n');
+                    cout <<"whichpart : head[H] righthand[RH] left[LH] left_leg[LL] rightleg[RL]";
+                    if (player_target == '1')
+                    p = hero1.skill1(Mons2,targetpart);
+                    if (player_target == '2')
+                    p = hero1.skill1(Mons2,targetpart);
+                    if (player_target == '3')
+                    p = hero1.skill1(Mons2,targetpart);
+                    if (player_target == '4')
+                    p = hero1.skill1(Mons2,targetpart);
+                    if (player_target == '5')
+                    p = hero1.skill1(Mons2,targetpart);
                 }
                 cout <<p;
                 hero1.endoturn();
@@ -539,6 +661,27 @@ int main(){
                     if (player_target == '5')
                     p = hero2.attack(Mons5,targetpart);
                 }
+                if (player_action == 'S'){
+                    cout << "target : ";
+                    if(!Mons1.isDead())cout <<"[1]";
+                    if(!Mons2.isDead())cout <<"[2]"; 
+                    if(!Mons3.isDead())cout <<"[3]";
+                    if(!Mons4.isDead())cout <<"[4]";
+                    if(!Mons5.isDead())cout <<"[5]";
+                    cin>>player_target;
+                    cin.ignore(1000, '\n');
+                    cout <<"whichpart : head[H] righthand[RH] left[LH] left_leg[LL] rightleg[RL]";
+                    if (player_target == '1')
+                    p = hero2.skill1(Mons2,targetpart);
+                    if (player_target == '2')
+                    p = hero2.skill1(Mons2,targetpart);
+                    if (player_target == '3')
+                    p = hero2.skill1(Mons2,targetpart);
+                    if (player_target == '4')
+                    p = hero2.skill1(Mons2,targetpart);
+                    if (player_target == '5')
+                    p = hero2.skill1(Mons2,targetpart);
+                }
                 cout <<p;
                 hero2.endoturn();
             }
@@ -553,9 +696,9 @@ int main(){
             int temp1 = rand()%2;
             int temp2 = rand()%5;
 
-                if(tempp == 0) {Mons1.guard();cout <<"guard";}
+                if(tempp == 0) {Mons1.guard();cout <<"\t\t\t\tguard\n";}
                 if(tempp == 1) {Mons1.dodge();
-                cout <<"dodge";}
+                cout <<"\t\t\t\tdodge\n";}
                 if(tempp == 2) { 
                     if (temp2==0) targetpart ="H";
                     if (temp2==1) targetpart ="RH";
@@ -566,12 +709,12 @@ int main(){
                     
                     m = Mons1.attack(hero1,targetpart);
                     cout << "target : "<<name<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     }
 
                     if (temp1 == 1){
                     cout << "target :"<<"Kuutar"<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     m = Mons1.attack(hero2,targetpart);
                 }
                 cout <<m ;
@@ -592,9 +735,9 @@ int main(){
             int temp2 = rand()%5;
 
                 if(tempp == 0) {Mons2.guard();
-                cout <<"guard";}
+                cout <<"\t\t\t\tguard\n";}
                 if(tempp == 1) {Mons2.dodge();
-                cout <<"dodge";}
+                cout <<"\t\t\t\tdodge\n";}
                 if(tempp == 2) { 
                     if (temp2==0) targetpart ="H";
                     if (temp2==1) targetpart ="RH";
@@ -605,12 +748,12 @@ int main(){
                     
                     m = Mons2.attack(hero1,targetpart);
                     cout << "target : "<<name<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     }
 
                     if (temp1 == 1){
                     cout << "target :"<<"Kuutar"<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     m = Mons2.attack(hero2,targetpart);
                 }
                 cout <<m ;
@@ -629,9 +772,9 @@ int main(){
             int temp1 = rand()%2;
             int temp2 = rand()%5;
 
-                if(tempp == 0) {Mons3.guard();cout <<"guard";}
+                if(tempp == 0) {Mons3.guard();cout <<"\t\t\t\tguard\n";}
                 if(tempp == 1) {Mons3.dodge();
-                cout <<"dodge";}
+                cout <<"\t\t\t\tdodge\n";}
                 if(tempp == 2) { 
                     if (temp2==0) targetpart ="H ";
                     if (temp2==1) targetpart ="RH ";
@@ -642,12 +785,12 @@ int main(){
                     
                     m = Mons3.attack(hero1,targetpart);
                     cout << "target : "<<name<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     }
 
                     if (temp1 == 1){
                     cout << "target :"<<"Kuutar"<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     m = Mons3.attack(hero2,targetpart);
                 }
                 cout <<m ;
@@ -667,9 +810,9 @@ int main(){
             int temp2 = rand()%5;
 
                 if(tempp == 0) {Mons4.guard();
-                cout <<"guard";}
+                cout <<"\t\t\t\tguard\n";}
                 if(tempp == 1) {Mons4.dodge();
-                cout <<"dodge";}
+                cout <<"\t\t\t\tdodge\n";}
                 if(tempp == 2) { 
                     if (temp2==0) targetpart ="H";
                     if (temp2==1) targetpart ="RH";
@@ -680,12 +823,12 @@ int main(){
                     
                     m = Mons4.attack(hero1,targetpart);
                     cout << "target : "<<name<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     }
 
                     if (temp1 == 1){
                     cout << "target :"<<"Kuutar"<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     m = Mons4.attack(hero2,targetpart);
                     }
                     cout <<m ;
@@ -704,10 +847,10 @@ int main(){
             int temp2 = rand()%5;
 
                 if(tempp == 0) {Mons5.guard();
-                cout <<"guard";
+                cout <<"\t\t\t\tguard\n";
                 }
                 if(tempp == 1) {Mons5.dodge();
-                cout <<"dodge";}
+                cout <<"\t\t\t\tdodge\n";}
                 if(tempp == 2) { 
                     if (temp2==0) targetpart ="H";
                     if (temp2==1) targetpart ="RH";
@@ -718,12 +861,12 @@ int main(){
                     
                     m = Mons5.attack(hero1,targetpart);
                     cout << "target : "<<name<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     }
 
                     if (temp1 == 1){
                     cout << "target :"<<"Kuutar"<<" ";
-                    cout <<"whichpart : "<<targetpart<<" ";
+                    cout <<"whichpart : "<<targetpart<<" \n";
                     m = Mons5.attack(hero2,targetpart);
                 }
                 cout <<m ;
